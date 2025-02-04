@@ -29,11 +29,11 @@ const Upload = () => {
 
   return (
     <div className="uploadRoute">
+      <h3>Upload Dead Ends</h3>
+      <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
       <Link className="homeLink" to="/">
         Back to Map
       </Link>
-      <h3>Upload Dead Ends</h3>
-      <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
     </div>
   );
 };

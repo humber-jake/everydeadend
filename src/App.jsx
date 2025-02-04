@@ -76,14 +76,14 @@ function App() {
                 ></Marker>
               ))}
             </MarkerClusterGroup>
-            <PopupImg
-              hidden={hidden}
-              setHidden={setHidden}
-              imageUrl={imageUrl}
-              setImageUrl={setImageUrl}
-              handleClickHidden={handleClickHidden}
-            />
           </MapContainer>
+          <PopupImg
+            hidden={hidden}
+            setHidden={setHidden}
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+            handleClickHidden={handleClickHidden}
+          />
         </div>
       )}
     </>

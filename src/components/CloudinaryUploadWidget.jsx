@@ -20,9 +20,11 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
           async (error, result) => {
             if (!error && result && result.event === "success") {
               setPublicId(result.info.public_id);
-              const { latitude, longitude } = await getGPSData(result.info.url);
+              const { latitude, longitude } = await getGPSData(
+                result.info.secure_url
+              );
               const { error } = await supabase.from("images").insert({
-                url: result.info.url,
+                url: result.info.secure_url,
                 latitude: latitude,
                 longitude: longitude,
               });
