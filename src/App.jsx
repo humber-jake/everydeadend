@@ -1,0 +1,94 @@
+import React, { useEffect, useState } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  ImageOverlay,
+} from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import deadEndIcon from "./assets/deadEndIcon.svg";
+import PopupImg from "./PopupImg";
+import supabase from "./utils/supabase";
+import "./leaflet.css";
+import "./App.css";
+
+// import { db } from "./db";
+// import { everyDeadEnd } from "./db/schema";
+
+// const CLIENT_ID = "7b12c73637ed338";
+// const CLIENT_SECRET = "1ab82eafd0064f5f1f4fdd43b396879c01350219";
+
+function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [markers, setMarkers] = useState();
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    const getMarkers = async () => {
+      let { data } = await supabase.from("images").select();
+      console.log(data);
+      setMarkers(data);
+      setIsLoading(false);
+    };
+    getMarkers();
+  }, []);
+
+  const deadEndMarker = new L.Icon({
+    iconUrl: deadEndIcon,
+    iconRetinaUrl: deadEndIcon,
+    popupAnchor: [-0, -0],
+    iconSize: [32, 45],
+  });
+
+  const [hidden, setHidden] = useState(true);
+
+  function displayPopupImg(e) {
+    setImageUrl(e.target.options._imageUrl);
+    setHidden(false);
+  }
+
+  return (
+    <>
+      {isLoading ? (
+        <div className="loading">Loading dead ends...</div>
+      ) : (
+        <div id="map">
+          <div className="donateLink">
+            <a href="https://www.gofundme.com/f/everydeadendla">Donate</a>
+          </div>
+          <MapContainer
+            center={[33.992605, -118.202009]}
+            zoom={10}
+            scrollWheelZoom={true}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <MarkerClusterGroup chunkedLoading>
+              {markers.map((marker, i) => (
+                <Marker
+                  key={i}
+                  position={[marker.latitude, marker.longitude]}
+                  icon={deadEndMarker}
+                  _imageUrl={marker.url}
+                  eventHandlers={{
+                    click: displayPopupImg,
+                  }}
+                ></Marker>
+              ))}
+            </MarkerClusterGroup>
+            <PopupImg
+              hidden={hidden}
+              setHidden={setHidden}
+              imageUrl={imageUrl}
+            />
+          </MapContainer>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default App;
