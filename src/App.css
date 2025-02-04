@@ -1,7 +1,8 @@
 #root {
   width: 100%;
   height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Helvetica, sans-serif;
+  font-weight: 100;
 }
 .logo {
   height: 6em;
@@ -31,54 +32,71 @@
   }
 }
 
+.hidden {
+  display: none;
+  opacity: 0;
+  transition-property: display opacity;
+  transition-duration: 500ms;
+  transition-behavior: allow-discrete;
+}
+
 .PopupImg {
   position: fixed;
-  z-index: 400;
+  z-index: 1030;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
   align-content: center;
-  .imageContainer {
-    height: 100%;
-    margin: 0 auto;
-    width: fit-content;
-    position: relative;
-    max-height: 80%;
+  transition-duration: 500ms;
+  @starting-style {
+    opacity: 0;
   }
-  img {
-    height: 100%;
+  .imageContainer {
+    padding: 1rem;
+    padding-top: 0;
+    border-radius: 10px;
+    background: rgb(243, 243, 243);
+    max-width: 90%;
+    width: fit-content;
     margin: 0 auto;
+    box-sizing: border-box;
+    transition: 500ms;
+    img {
+      vertical-align: middle;
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 5px;
+      transition: 500ms;
+    }
   }
   .close {
-    width: 30px;
-    height: 30px;
+    font-family: Helvetica, sans-serif;
+    font-weight: 100;
+    height: 1rem;
+    padding: 0.5rem 0;
+    width: fit-content;
+    margin-right: 0;
+    margin-left: auto;
     z-index: 500;
-    position: absolute;
-    transform: translate(50%, -50%);
-    right: 0;
-    top: 0;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    align-content: center;
-    text-align: center;
-    font-size: 1.2rem;
+    align-content: end;
+    color: #575757;
+    opacity: 70%;
+    text-transform: uppercase;
+    transition: 500ms;
   }
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0%;
+  .close:hover {
+    transition: 200ms;
+    letter-spacing: 5px;
+    opacity: 30%;
   }
-  to {
-    opacity: 100%;
+  .close::after {
+    content: "ⓧ";
+    padding-left: 0.5rem;
   }
 }
 
-.hidden {
-  display: none;
-  opacity: 0%;
-}
 .loading {
   display: block;
   width: fit-content;
@@ -86,7 +104,7 @@
 }
 
 .donateLink {
-  z-index: 500;
+  z-index: 420;
   font-size: 1.25rem;
   position: absolute;
   top: 15px;
@@ -99,10 +117,15 @@
 
   a,
   a:visited {
+    font-family: Helvetica, sans-serif;
+    text-transform: uppercase;
+    font-weight: 100;
     text-decoration: none;
     color: #575757;
+    transition: 200ms;
   }
   a:hover {
+    transition: 200ms;
     color: rgb(20, 170, 60);
   }
 }

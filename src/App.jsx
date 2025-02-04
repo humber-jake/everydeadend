@@ -35,7 +35,9 @@ function App() {
   }
 
   function handleClickHidden() {
-    setImageUrl("");
+    setTimeout(() => {
+      setImageUrl("");
+    }, 500);
     setHidden(true);
   }
 

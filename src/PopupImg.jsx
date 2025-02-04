@@ -7,10 +7,10 @@ const PopupImg = (props) => {
   return (
     <div className={hidden ? "PopupImg hidden" : "PopupImg"}>
       <div className="imageContainer">
-        <img loading="lazy" src={imageUrl}></img>
         <div className="close" onClick={handleClickHidden}>
-          x
+          close
         </div>
+        <img loading="lazy" src={imageUrl}></img>
       </div>
     </div>
   );
