@@ -6,22 +6,8 @@ import supabase from "./utils/supabase";
 import { Link } from "react-router";
 
 const Upload = () => {
-  const [dragover, setDragover] = useState(false);
-
-  const [data, setTodos] = useState([]);
-
-  // Configuration
-  // const uploadPreset = "default";
-
   // State
   const [publicId, setPublicId] = useState("");
-
-  // Cloudinary configuration
-  const cld = new Cloudinary({
-    cloud: {
-      cloudName: import.meta.env.VITE_CLOUD_NAME,
-    },
-  });
 
   // Upload Widget Configuration
   const uwConfig = {

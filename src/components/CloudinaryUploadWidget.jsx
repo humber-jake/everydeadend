@@ -6,9 +6,7 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
   const uploadWidgetRef = useRef(null);
   const uploadButtonRef = useRef(null);
 
-  const logEXIF = async (image) => {
-    console.log(`image:`);
-    console.log(image);
+  const getGPSData = async (image) => {
     const result = await exifr.gps(image);
     return result;
   };
@@ -21,10 +19,8 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
           uwConfig,
           async (error, result) => {
             if (!error && result && result.event === "success") {
-              console.log("Upload successful:", result.info);
               setPublicId(result.info.public_id);
-              const { latitude, longitude } = await logEXIF(result.info.url);
-              console.log(latitude, longitude);
+              const { latitude, longitude } = await getGPSData(result.info.url);
               const { error } = await supabase.from("images").insert({
                 url: result.info.url,
                 latitude: latitude,

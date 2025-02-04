@@ -13,12 +13,6 @@ import supabase from "./utils/supabase";
 import "./leaflet.css";
 import "./App.css";
 
-// import { db } from "./db";
-// import { everyDeadEnd } from "./db/schema";
-
-// const CLIENT_ID = "7b12c73637ed338";
-// const CLIENT_SECRET = "1ab82eafd0064f5f1f4fdd43b396879c01350219";
-
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [markers, setMarkers] = useState();
@@ -27,7 +21,6 @@ function App() {
   useEffect(() => {
     const getMarkers = async () => {
       let { data } = await supabase.from("images").select();
-      console.log(data);
       setMarkers(data);
       setIsLoading(false);
     };
