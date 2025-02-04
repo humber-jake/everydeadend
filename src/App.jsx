@@ -67,7 +67,11 @@ function App() {
               {markers.map((marker, i) => (
                 <Marker
                   key={i}
-                  position={[marker.latitude, marker.longitude]}
+                  position={
+                    marker.latitude && marker.longitude
+                      ? [marker.latitude, marker.longitude]
+                      : [0, 0]
+                  }
                   icon={deadEndMarker}
                   _imageUrl={marker.url}
                   eventHandlers={{

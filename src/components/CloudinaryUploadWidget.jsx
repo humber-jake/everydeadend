@@ -7,7 +7,7 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
   const uploadButtonRef = useRef(null);
 
   const getGPSData = async (image) => {
-    const result = await exifr.gps(image);
+    const result = await exifr.parse(image);
     return result;
   };
 
@@ -23,11 +23,24 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
               const { latitude, longitude } = await getGPSData(
                 result.info.secure_url
               );
-              const { error } = await supabase.from("images").insert({
-                url: result.info.secure_url,
-                latitude: latitude,
-                longitude: longitude,
-              });
+              if (!latitude || !longitude) {
+                console.log(
+                  `Error: no GPS data for ${result.info.original_filename}`
+                );
+                const { error } = await supabase
+                  .from("rejected_images")
+                  .insert({
+                    url: result.info.secure_url,
+                    filename: result.info.original_filename,
+                    public_id: result.info.public_id,
+                  });
+              } else {
+                const { error } = await supabase.from("images").insert({
+                  url: result.info.secure_url,
+                  latitude: latitude,
+                  longitude: longitude,
+                });
+              }
             }
           }
         );

@@ -35,6 +35,8 @@ const Upload = () => {
         Back to Map
       </Link>
     </div>
+
+    // TODO: Add purge button to remove rejected images from cloudinary
   );
 };
 
