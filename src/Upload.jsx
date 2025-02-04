@@ -21,7 +21,7 @@ const Upload = () => {
     folder: "everydeadend",
     // tags: ['users', 'profile'],
     // context: { alt: 'user_uploaded' },
-    clientAllowedFormats: ["images"],
+    // clientAllowedFormats: ["images"],
     // maxImageFileSize: 2000000,
     // maxImageWidth: 2000,
     // theme: 'purple',

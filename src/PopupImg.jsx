@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 
 const PopupImg = (props) => {
-  const { hidden, setHidden, imageUrl } = props;
-
-  const handleClickHidden = () => {
-    setHidden(true);
-  };
+  const { hidden, imageUrl, handleClickHidden } = props;
 
   return (
     <div className={hidden ? "PopupImg hidden" : "PopupImg"}>

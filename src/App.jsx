@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  ImageOverlay,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMapEvent } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import deadEndIcon from "./assets/deadEndIcon.svg";
 import PopupImg from "./PopupImg";
@@ -17,7 +11,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [markers, setMarkers] = useState();
   const [imageUrl, setImageUrl] = useState("");
-
   useEffect(() => {
     const getMarkers = async () => {
       let { data } = await supabase.from("images").select();
@@ -41,6 +34,11 @@ function App() {
     setHidden(false);
   }
 
+  function handleClickHidden() {
+    setImageUrl("");
+    setHidden(true);
+  }
+
   return (
     <>
       {isLoading ? (
@@ -54,12 +52,18 @@ function App() {
             center={[33.992605, -118.202009]}
             zoom={10}
             scrollWheelZoom={true}
+            maxZoom={18}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <MarkerClusterGroup chunkedLoading>
+            <MarkerClusterGroup
+              chunkedLoading
+              spiderfyOnMaxZoom={false}
+              showCoverageOnHover={false}
+              disableClusteringAtZoom={15}
+            >
               {markers.map((marker, i) => (
                 <Marker
                   key={i}
@@ -76,6 +80,8 @@ function App() {
               hidden={hidden}
               setHidden={setHidden}
               imageUrl={imageUrl}
+              setImageUrl={setImageUrl}
+              handleClickHidden={handleClickHidden}
             />
           </MapContainer>
         </div>
