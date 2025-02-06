@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvent } from "react-leaflet";
+import { Link } from "react-router";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import deadEndIcon from "./assets/deadEndIcon.svg";
 import PopupImg from "./PopupImg";
 import supabase from "./utils/supabase";
+import checkAuth from "./utils/checkAuth";
 import "./leaflet.css";
 import "./App.css";
 
@@ -11,14 +13,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [markers, setMarkers] = useState();
   const [imageUrl, setImageUrl] = useState("");
-  useEffect(() => {
-    const getMarkers = async () => {
-      let { data } = await supabase.from("images").select();
-      setMarkers(data);
-      setIsLoading(false);
-    };
-    getMarkers();
-  }, []);
+  const [hidden, setHidden] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const deadEndMarker = new L.Icon({
     iconUrl: deadEndIcon,
@@ -26,8 +22,6 @@ function App() {
     popupAnchor: [-0, -0],
     iconSize: [32, 45],
   });
-
-  const [hidden, setHidden] = useState(true);
 
   function displayPopupImg(e) {
     setImageUrl(e.target.options._imageUrl);
@@ -40,6 +34,21 @@ function App() {
     }, 500);
     setHidden(true);
   }
+  function logOut() {
+    supabase.auth.signOut();
+    setIsLoggedIn(false);
+  }
+
+  useEffect(() => {
+    async function getMarkers() {
+      let { data } = await supabase.from("images").select();
+      setMarkers(data);
+      setIsLoading(false);
+    }
+
+    checkAuth(setIsLoggedIn);
+    getMarkers();
+  }, []);
 
   return (
     <>
@@ -47,12 +56,24 @@ function App() {
         <div className="loading">Loading dead ends...</div>
       ) : (
         <div id="map">
-          <div className="donateLink">
-            <a href="https://www.gofundme.com/f/everydeadendla">Donate</a>
+          <div className="controls">
+            <div className="controlButton">
+              <a href="https://www.gofundme.com/f/everydeadendla">Donate</a>
+            </div>
+            {isLoggedIn && (
+              <>
+                <div className="controlButton" onClick={logOut}>
+                  <Link to="#">Log Out</Link>
+                </div>
+                <div className="controlButton">
+                  <Link to="/upload">Upload</Link>
+                </div>
+              </>
+            )}
           </div>
           <MapContainer
             center={[33.992605, -118.202009]}
-            zoom={10}
+            zoom={9}
             scrollWheelZoom={true}
             maxZoom={18}
           >

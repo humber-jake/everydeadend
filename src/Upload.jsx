@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import CloudinaryUploadWidget from "./components/CloudinaryUploadWidget";
 import "./App.css";
 import supabase from "./utils/supabase";
+import checkAuth from "./utils/checkAuth";
 import { Link } from "react-router";
 
 const Upload = () => {
   // State
   const [publicId, setPublicId] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Upload Widget Configuration
   const uwConfig = {
@@ -27,13 +29,28 @@ const Upload = () => {
     // theme: 'purple',
   };
 
+  useEffect(() => {
+    checkAuth(setIsLoggedIn);
+  }, []);
+
   return (
-    <div className="uploadRoute">
-      <h3>Upload Dead Ends</h3>
-      <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
-      <Link className="homeLink" to="/">
-        Back to Map
-      </Link>
+    <div className="Upload">
+      {isLoggedIn ? (
+        <>
+          <h2>Upload Dead Ends</h2>
+          <CloudinaryUploadWidget
+            uwConfig={uwConfig}
+            setPublicId={setPublicId}
+          />
+          <Link className="controlButton" to="/">
+            Back to Map
+          </Link>
+        </>
+      ) : (
+        <p>
+          Please <Link to={"/login"}>login</Link> to upload new dead ends.
+        </p>
+      )}
     </div>
 
     // TODO: Add purge button to remove rejected images from cloudinary

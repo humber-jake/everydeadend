@@ -1,8 +1,9 @@
 #root {
   width: 100%;
   height: 100%;
-  font-family: Helvetica, sans-serif;
+  font-family: Helvetica-light, sans-serif;
   font-weight: 100;
+  color: #575757;
 }
 .logo {
   height: 6em;
@@ -86,7 +87,6 @@
     margin-left: auto;
     z-index: 500;
     align-content: end;
-    color: #575757;
     opacity: 70%;
     text-transform: uppercase;
     transition-duration: 500ms;
@@ -109,34 +109,7 @@
   margin: 0 auto;
 }
 
-.donateLink {
-  z-index: 420;
-  font-size: 1.25rem;
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(255, 255, 255);
-  border: 1px solid rgb(168, 168, 168);
-  border-radius: 5px;
-  padding: 0.5rem 0.75rem;
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.389);
-
-  a,
-  a:visited {
-    font-family: Helvetica, sans-serif;
-    text-transform: uppercase;
-    font-weight: 100;
-    text-decoration: none;
-    color: #575757;
-    transition: 200ms;
-  }
-  a:hover {
-    transition: 200ms;
-    color: rgb(20, 170, 60);
-  }
-}
-
-.uploadRoute {
+.Upload {
   display: block;
   text-align: center;
   width: 100vw;
@@ -148,21 +121,57 @@
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.365);
   }
 }
-.homeLink {
-  border-radius: 5px;
-  padding: 1rem;
-  color: white;
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.365);
-  background: rgb(49, 207, 49);
-  display: block;
-  width: 200px;
-  margin: 1rem auto;
-  box-sizing: border-box;
+.Login,
+.Upload {
+  width: 80%;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+  h2 {
+    font-weight: 100;
+  }
+  .controlButton {
+    margin: 1rem auto;
+    width: 80% !important;
+    box-sizing: border-box;
+  }
+  p {
+    text-wrap: balance;
+  }
 }
-.homeLink:hover {
-  text-decoration: none;
-  color: white;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.365);
+.controls {
+  z-index: 420;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  text-align: center;
+  top: 15px;
+  right: 15px;
+  gap: 10px;
+  font-family: Helvetica-light, sans-serif;
+}
+.controlButton {
+  display: block;
+  background: rgba(255, 255, 255);
+  border: 1px solid rgb(168, 168, 168);
+  border-radius: 5px;
+  padding: 0.5rem 0.75rem;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.69);
+  text-transform: uppercase;
+  font-weight: 100;
+  color: #575757;
+  a:visited {
+    all: unset;
+    text-transform: uppercase;
+    font-weight: 100;
+    text-decoration: none;
+    transition: 200ms;
+  }
+  a:hover {
+    transition: 200ms;
+    color: rgb(20, 170, 60);
+  }
 }
 
 .card {
