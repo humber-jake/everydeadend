@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Cloudinary } from "@cloudinary/url-gen";
-import CloudinaryUploadWidget from "./components/CloudinaryUploadWidget";
-import "./App.css";
-import supabase from "./utils/supabase";
-import checkAuth from "./utils/checkAuth";
-import { Link } from "react-router";
+import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
+import "../styles/App.css";
+import supabase from "../utils/supabase";
+import checkAuth from "../utils/checkAuth";
+import { Link, useNavigate } from "react-router";
 
 const Upload = () => {
   // State
   const [publicId, setPublicId] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState();
+  let navigate = useNavigate();
 
   // Upload Widget Configuration
   const uwConfig = {
@@ -30,7 +32,13 @@ const Upload = () => {
   };
 
   useEffect(() => {
-    checkAuth(setIsLoggedIn);
+    checkAuth(setIsLoggedIn, setIsAdmin).then((data) => {
+      const [result, role] = data;
+      if (role !== "admin") {
+        alert(`You don't have permission to do that.`);
+        navigate("/");
+      }
+    });
   }, []);
 
   return (

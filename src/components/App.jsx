@@ -2,19 +2,21 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvent } from "react-leaflet";
 import { Link } from "react-router";
 import MarkerClusterGroup from "react-leaflet-cluster";
-import deadEndIcon from "./assets/deadEndIcon.svg";
+import deadEndIcon from "../assets/deadEndIcon.svg";
 import PopupImg from "./PopupImg";
-import supabase from "./utils/supabase";
-import checkAuth from "./utils/checkAuth";
-import "./leaflet.css";
-import "./App.css";
+import supabase from "../utils/supabase";
+import checkAuth from "../utils/checkAuth";
+import "../styles/leaflet.css";
+import "../styles/App.css";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [markers, setMarkers] = useState();
   const [imageUrl, setImageUrl] = useState("");
+  const [publicId, setPublicId] = useState("");
   const [hidden, setHidden] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const deadEndMarker = new L.Icon({
     iconUrl: deadEndIcon,
@@ -25,6 +27,7 @@ function App() {
 
   function displayPopupImg(e) {
     setImageUrl(e.target.options._imageUrl);
+    setPublicId(e.target.options._publicId);
     setHidden(false);
   }
 
@@ -42,11 +45,15 @@ function App() {
   useEffect(() => {
     async function getMarkers() {
       let { data } = await supabase.from("images").select();
-      setMarkers(data);
+      let markers = {};
+      data.forEach((marker) => {
+        markers[marker.public_id] = marker;
+      });
+      setMarkers(markers);
       setIsLoading(false);
     }
 
-    checkAuth(setIsLoggedIn);
+    checkAuth(setIsLoggedIn, setIsAdmin);
     getMarkers();
   }, []);
 
@@ -87,16 +94,20 @@ function App() {
               showCoverageOnHover={false}
               disableClusteringAtZoom={15}
             >
-              {markers.map((marker, i) => (
+              {Object.keys(markers).map((public_id, i) => (
                 <Marker
                   key={i}
                   position={
-                    marker.latitude && marker.longitude
-                      ? [marker.latitude, marker.longitude]
+                    markers[public_id].latitude && markers[public_id].longitude
+                      ? [
+                          markers[public_id].latitude,
+                          markers[public_id].longitude,
+                        ]
                       : [0, 0]
                   }
                   icon={deadEndMarker}
-                  _imageUrl={marker.url}
+                  _imageUrl={markers[public_id].url}
+                  _publicId={markers[public_id].public_id}
                   eventHandlers={{
                     click: displayPopupImg,
                   }}
@@ -108,8 +119,11 @@ function App() {
             hidden={hidden}
             setHidden={setHidden}
             imageUrl={imageUrl}
+            publicId={publicId}
             setImageUrl={setImageUrl}
             handleClickHidden={handleClickHidden}
+            isAdmin={isAdmin}
+            markers={markers}
           />
         </div>
       )}

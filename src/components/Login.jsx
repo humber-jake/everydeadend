@@ -1,4 +1,4 @@
-import supabase from "./utils/supabase";
+import supabase from "../utils/supabase";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 
@@ -11,6 +11,7 @@ const Login = () => (
       appearance={{ theme: ThemeSupa }}
       providers={["google"]}
       onlyThirdPartyProviders
+      redirectTo={window.location.origin}
     />
   </div>
 );

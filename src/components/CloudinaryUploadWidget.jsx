@@ -37,6 +37,7 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
               } else {
                 const { error } = await supabase.from("images").insert({
                   url: result.info.secure_url,
+                  public_id: result.info.public_id,
                   latitude: latitude,
                   longitude: longitude,
                 });
